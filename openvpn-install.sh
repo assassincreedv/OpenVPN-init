@@ -273,7 +273,7 @@ function installQuestions() {
 	done
 	echo ""
 	echo "What port do you want OpenVPN to listen to?"
-	echo "   1) Default: 1194"
+	echo "   1) Default: 1800"
 	echo "   2) Custom"
 	echo "   3) Random [49152-65535]"
 	until [[ $PORT_CHOICE =~ ^[1-3]$ ]]; do
@@ -281,7 +281,7 @@ function installQuestions() {
 	done
 	case $PORT_CHOICE in
 	1)
-		PORT="1194"
+		PORT="1800"
 		;;
 	2)
 		until [[ $PORT =~ ^[0-9]+$ ]] && [ "$PORT" -ge 1 ] && [ "$PORT" -le 65535 ]; do
@@ -618,7 +618,7 @@ function installOpenVPN() {
 		IPV6_SUPPORT=${IPV6_SUPPORT:-n}
 		PORT_CHOICE=${PORT_CHOICE:-1}
 		PROTOCOL_CHOICE=${PROTOCOL_CHOICE:-1}
-		DNS=${DNS:-1}
+		DNS=${DNS:-9}
 		COMPRESSION_ENABLED=${COMPRESSION_ENABLED:-n}
 		CUSTOMIZE_ENC=${CUSTOMIZE_ENC:-n}
 		CLIENT=${CLIENT:-client}
@@ -783,8 +783,10 @@ group $NOGROUP
 persist-key
 persist-tun
 keepalive 10 120
-topology subnet
+topology net30
 server 10.8.0.0 255.255.255.0
+route 10.8.0.0 255.255.255.0
+route 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt" >>/etc/openvpn/server.conf
 
 	# DNS resolvers
@@ -858,7 +860,17 @@ ifconfig-pool-persist ipp.txt" >>/etc/openvpn/server.conf
 		fi
 		;;
 	esac
-	echo 'push "redirect-gateway def1 bypass-dhcp"' >>/etc/openvpn/server.conf
+	# Origianl Bypass DHCP 
+	echo '#push "redirect-gateway def1 bypass-dhcp"' >>/etc/openvpn/server.conf
+	# Split Tunnel
+	echo 'push "route 10.0.0.70 255.255.255.255"
+push "route 104.16.154.36 255.255.255.255"
+push "route 104.16.155.36 255.255.255.255"
+push "route 83.229.35.104 255.255.255.255"
+push "route 83.229.35.225 255.255.255.255"
+push "route 8.8.4.4 255.255.255.255"
+push "route 8.8.8.8 255.255.255.255"' >>/etc/openvpn/server.conf
+
 
 	# IPv6 network settings if needed
 	if [[ $IPV6_SUPPORT == 'y' ]]; then
