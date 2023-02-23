@@ -13,8 +13,7 @@ function isRoot() {
 function tunAvailable() {
 	if [ ! -e /dev/net/tun ]; then
 		return 1
-	fi
-}
+i[}
 
 function checkOS() {
 	if [[ -e /etc/debian_version ]]; then
