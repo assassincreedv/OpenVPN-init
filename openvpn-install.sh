@@ -1027,6 +1027,9 @@ ip6tables -I INPUT 1 -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >>/etc/iptabl
 
 	# Script to remove rules
 	echo "#!/bin/sh
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
 iptables -t nat -D POSTROUTING -s 20.8.0.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -D POSTROUTING -s 20.8.1.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -D POSTROUTING -s 20.8.2.0/24 -o $NIC -j MASQUERADE
@@ -1046,9 +1049,6 @@ iptables -D INPUT -i lo -j ACCEPT
 iptables -D OUTPUT -o lo -j ACCEPT
 iptables -D INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -D OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-iptables -D INPUT DROP
-iptables -D FORWARD DROP
-iptables -D OUTPUT DROP
 iptables -D FORWARD -i tun0 -o $NIC -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -D FORWARD -i $NIC -o tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 80 -j ACCEPT
