@@ -785,8 +785,8 @@ persist-tun
 keepalive 10 120
 topology net30
 server 20.8.0.0 255.255.255.0
-server 20.8.1.0 255.255.255.0
-server 20.8.2.0 255.255.255.0
+route 20.8.1.0 255.255.255.0
+route 20.8.2.0 255.255.255.0
 ifconfig-pool-persist ipp.txt" >>/etc/openvpn/server.conf
 
 	# DNS resolvers
