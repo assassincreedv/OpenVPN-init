@@ -981,8 +981,40 @@ iptables -t nat -I POSTROUTING 1 -s 20.8.0.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -I POSTROUTING 1 -s 20.8.1.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -I POSTROUTING 1 -s 20.8.2.0/24 -o $NIC -j MASQUERADE
 iptables -I INPUT 1 -i tun0 -j ACCEPT
-iptables -I FORWARD 1 -i $NIC -o tun0 -j ACCEPT
-iptables -I FORWARD 1 -i tun0 -o $NIC -j ACCEPT
+iptables -I OUTPUT 1 -o tun0 -j ACCEPT
+iptables -A INPUT -p tcp --dport ssh -j ACCEPT
+iptables -A OUTPUT -p tcp --dport ssh -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+iptables -A INPUT -p tcp --dport 53 -j ACCEPT
+iptables -A INPUT -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+iptables -I INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -I OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT DROP
+iptables -A FORWARD -i tun0 -o $NIC -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i $NIC -o tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 80 -j ACCEPT
+iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 443 -j ACCEPT
+iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 53 -j ACCEPT
+iptables -A FORWARD -i tun0 -o $NIC -p udp --dport 53 -j ACCEPT
+iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 22 -j ACCEPT
+iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 80 -j ACCEPT
+iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 443 -j ACCEPT
+iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 53 -j ACCEPT
+iptables -A FORWARD -i eth0 -o $NIC -p udp --dport 53 -j ACCEPT
+iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 22 -j ACCEPT
+iptables -I FORWARD -i tun0 -o $NIC -d 104.16.154.36 -j DROP
+iptables -I FORWARD -i tun0 -o $NIC -d 104.16.155.36 -j DROP
+iptables -I FORWARD -i tun0 -o $NIC -s 10.8.0.0/24 -d 104.16.154.36 -j ACCEPT
+iptables -I FORWARD -i tun0 -o $NIC -s 10.8.0.0/24 -d 104.16.155.36 -j ACCEPT
 iptables -I INPUT 1 -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >/etc/iptables/add-openvpn-rules.sh
 
 	if [[ $IPV6_SUPPORT == 'y' ]]; then
@@ -999,8 +1031,40 @@ iptables -t nat -D POSTROUTING -s 20.8.0.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -D POSTROUTING -s 20.8.1.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -D POSTROUTING -s 20.8.2.0/24 -o $NIC -j MASQUERADE
 iptables -D INPUT -i tun0 -j ACCEPT
-iptables -D FORWARD -i $NIC -o tun0 -j ACCEPT
-iptables -D FORWARD -i tun0 -o $NIC -j ACCEPT
+iptables -D OUTPUT -o tun0 -j ACCEPT
+iptables -D INPUT -p tcp --dport ssh -j ACCEPT
+iptables -D OUTPUT -p tcp --dport ssh -j ACCEPT
+iptables -D INPUT -p tcp --dport 80 -j ACCEPT
+iptables -D OUTPUT -p tcp --dport 80 -j ACCEPT
+iptables -D INPUT -p tcp --dport 443 -j ACCEPT
+iptables -D OUTPUT -p tcp --dport 443 -j ACCEPT
+iptables -D INPUT -p tcp --dport 53 -j ACCEPT
+iptables -D INPUT -p udp --dport 53 -j ACCEPT
+iptables -D OUTPUT -p tcp --dport 53 -j ACCEPT
+iptables -D OUTPUT -p udp --dport 53 -j ACCEPT
+iptables -D INPUT -i lo -j ACCEPT
+iptables -D OUTPUT -o lo -j ACCEPT
+iptables -D INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -D OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -D INPUT DROP
+iptables -D FORWARD DROP
+iptables -D OUTPUT DROP
+iptables -D FORWARD -i tun0 -o $NIC -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -D FORWARD -i $NIC -o tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 80 -j ACCEPT
+iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 443 -j ACCEPT
+iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 53 -j ACCEPT
+iptables -D FORWARD -i tun0 -o $NIC -p udp --dport 53 -j ACCEPT
+iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 22 -j ACCEPT
+iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 80 -j ACCEPT
+iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 443 -j ACCEPT
+iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 53 -j ACCEPT
+iptables -D FORWARD -i eth0 -o $NIC -p udp --dport 53 -j ACCEPT
+iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 22 -j ACCEPT
+iptables -D FORWARD -i tun0 -o $NIC -d 104.16.154.36 -j DROP
+iptables -D FORWARD -i tun0 -o $NIC -d 104.16.155.36 -j DROP
+iptables -D FORWARD -i tun0 -o $NIC -s 10.8.0.0/24 -d 104.16.154.36 -j ACCEPT
+iptables -D FORWARD -i tun0 -o $NIC -s 10.8.0.0/24 -d 104.16.155.36 -j ACCEPT
 iptables -D INPUT -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >/etc/iptables/rm-openvpn-rules.sh
 
 	if [[ $IPV6_SUPPORT == 'y' ]]; then
