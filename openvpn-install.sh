@@ -272,7 +272,7 @@ function installQuestions() {
 	done
 	echo ""
 	echo "What port do you want OpenVPN to listen to?"
-	echo "   1) Default: 1800"
+	echo "   1) Default: 1194"
 	echo "   2) Custom"
 	echo "   3) Random [49152-65535]"
 	until [[ $PORT_CHOICE =~ ^[1-3]$ ]]; do
@@ -280,7 +280,7 @@ function installQuestions() {
 	done
 	case $PORT_CHOICE in
 	1)
-		PORT="1800"
+		PORT="1194"
 		;;
 	2)
 		until [[ $PORT =~ ^[0-9]+$ ]] && [ "$PORT" -ge 1 ] && [ "$PORT" -le 65535 ]; do
@@ -783,9 +783,27 @@ persist-key
 persist-tun
 keepalive 10 120
 topology net30
-server 20.8.0.0 255.255.255.0
-route 20.8.1.0 255.255.255.0
-route 20.8.2.0 255.255.255.0
+server 20.0.0.0 255.255.255.0
+route 20.0.1.0 255.255.255.0
+route 20.0.2.0 255.255.255.0
+route 20.0.3.0 255.255.255.0
+route 20.0.4.0 255.255.255.0
+route 20.0.5.0 255.255.255.0
+route 20.0.6.0 255.255.255.0
+route 20.0.7.0 255.255.255.0
+route 20.0.8.0 255.255.255.0
+route 20.0.9.0 255.255.255.0
+route 20.0.10.0 255.255.255.0
+route 20.0.11.0 255.255.255.0
+route 20.0.12.0 255.255.255.0
+route 20.0.13.0 255.255.255.0
+route 20.0.14.0 255.255.255.0
+route 20.0.15.0 255.255.255.0
+route 20.0.16.0 255.255.255.0
+route 20.0.17.0 255.255.255.0
+route 20.0.18.0 255.255.255.0
+route 20.0.19.0 255.255.255.0
+route 20.0.20.0 255.255.255.0
 ifconfig-pool-persist ipp.txt" >>/etc/openvpn/server.conf
 
 	# DNS resolvers
@@ -807,7 +825,7 @@ ifconfig-pool-persist ipp.txt" >>/etc/openvpn/server.conf
 		done
 		;;
 	2) # Self-hosted DNS resolver (Unbound)
-		echo 'push "dhcp-option DNS 20.8.0.1"' >>/etc/openvpn/server.conf
+		echo 'push "dhcp-option DNS 20.0.0.1"' >>/etc/openvpn/server.conf
 		if [[ $IPV6_SUPPORT == 'y' ]]; then
 			echo 'push "dhcp-option DNS fd42:42:42:42::1"' >>/etc/openvpn/server.conf
 		fi
@@ -862,13 +880,6 @@ ifconfig-pool-persist ipp.txt" >>/etc/openvpn/server.conf
 	# Origianl Bypass DHCP 
 	echo '#push "redirect-gateway def1 bypass-dhcp"' >>/etc/openvpn/server.conf
 	# Split Tunnel
-	echo 'push "route 10.0.0.70 255.255.255.255"
-push "route 104.16.154.36 255.255.255.255"
-push "route 104.16.155.36 255.255.255.255"
-push "route 83.229.35.104 255.255.255.255"
-push "route 83.229.35.225 255.255.255.255"
-push "route 8.8.4.4 255.255.255.255"
-push "route 8.8.8.8 255.255.255.255"' >>/etc/openvpn/server.conf
 
 
 	# IPv6 network settings if needed
@@ -912,7 +923,8 @@ tls-version-min 1.2
 tls-cipher $CC_CIPHER
 client-config-dir /etc/openvpn/ccd
 status /var/log/openvpn/status.log
-verb 3" >>/etc/openvpn/server.conf
+verb 3
+management localhost 7505" >>/etc/openvpn/server.conf
 
 	# Create client-config-dir dir
 	mkdir -p /etc/openvpn/ccd
@@ -977,9 +989,27 @@ verb 3" >>/etc/openvpn/server.conf
 
 	# Script to add rules
 	echo "#!/bin/sh
-iptables -t nat -I POSTROUTING 1 -s 20.8.0.0/24 -o $NIC -j MASQUERADE
-iptables -t nat -I POSTROUTING 1 -s 20.8.1.0/24 -o $NIC -j MASQUERADE
-iptables -t nat -I POSTROUTING 1 -s 20.8.2.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.0.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.1.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.2.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.3.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.4.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.5.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.6.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.7.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.8.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.9.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.10.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.11.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.12.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.13.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.14.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.15.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.16.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.17.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.18.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.19.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -s 20.0.20.0/24 -o $NIC -j MASQUERADE
 iptables -I INPUT 1 -i tun0 -j ACCEPT
 iptables -I OUTPUT 1 -o tun0 -j ACCEPT
 iptables -A INPUT -p tcp --dport ssh -j ACCEPT
@@ -1011,10 +1041,6 @@ iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 443 -j ACCEPT
 iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 53 -j ACCEPT
 iptables -A FORWARD -i eth0 -o $NIC -p udp --dport 53 -j ACCEPT
 iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 22 -j ACCEPT
-iptables -I FORWARD -i tun0 -o $NIC -d 104.16.154.36 -j DROP
-iptables -I FORWARD -i tun0 -o $NIC -d 104.16.155.36 -j DROP
-iptables -I FORWARD -i tun0 -o $NIC -s 10.8.0.0/24 -d 104.16.154.36 -j ACCEPT
-iptables -I FORWARD -i tun0 -o $NIC -s 10.8.0.0/24 -d 104.16.155.36 -j ACCEPT
 iptables -I INPUT 1 -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >/etc/iptables/add-openvpn-rules.sh
 
 	if [[ $IPV6_SUPPORT == 'y' ]]; then
@@ -1030,9 +1056,27 @@ ip6tables -I INPUT 1 -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >>/etc/iptabl
 iptables -P INPUT ACCEPT
 iptables -P FORWARD ACCEPT
 iptables -P OUTPUT ACCEPT
-iptables -t nat -D POSTROUTING -s 20.8.0.0/24 -o $NIC -j MASQUERADE
-iptables -t nat -D POSTROUTING -s 20.8.1.0/24 -o $NIC -j MASQUERADE
-iptables -t nat -D POSTROUTING -s 20.8.2.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.0.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.1.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.2.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.3.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.4.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.5.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.6.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.7.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.8.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.9.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.10.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.11.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.12.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.13.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.14.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.15.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.16.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.17.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.18.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.19.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -D POSTROUTING -s 20.0.20.0/24 -o $NIC -j MASQUERADE
 iptables -D INPUT -i tun0 -j ACCEPT
 iptables -D OUTPUT -o tun0 -j ACCEPT
 iptables -D INPUT -p tcp --dport ssh -j ACCEPT
@@ -1061,10 +1105,6 @@ iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 443 -j ACCEPT
 iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 53 -j ACCEPT
 iptables -D FORWARD -i eth0 -o $NIC -p udp --dport 53 -j ACCEPT
 iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 22 -j ACCEPT
-iptables -D FORWARD -i tun0 -o $NIC -d 104.16.154.36 -j DROP
-iptables -D FORWARD -i tun0 -o $NIC -d 104.16.155.36 -j DROP
-iptables -D FORWARD -i tun0 -o $NIC -s 10.8.0.0/24 -d 104.16.154.36 -j ACCEPT
-iptables -D FORWARD -i tun0 -o $NIC -s 10.8.0.0/24 -d 104.16.155.36 -j ACCEPT
 iptables -D INPUT -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >/etc/iptables/rm-openvpn-rules.sh
 
 	if [[ $IPV6_SUPPORT == 'y' ]]; then
