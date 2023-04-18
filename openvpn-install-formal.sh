@@ -1009,7 +1009,6 @@ iptables -t nat -I POSTROUTING 1 -s 20.0.17.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -I POSTROUTING 1 -s 20.0.18.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -I POSTROUTING 1 -s 20.0.19.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -I POSTROUTING 1 -s 20.0.20.0/24 -o $NIC -j MASQUERADE
-iptables -I OUTPUT 1 -o tun0 -j ACCEPT
 iptables -A INPUT -p tcp --dport ssh -j ACCEPT
 iptables -A OUTPUT -p tcp --dport ssh -j ACCEPT
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
@@ -1078,8 +1077,6 @@ iptables -t nat -D POSTROUTING -s 20.0.17.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -D POSTROUTING -s 20.0.18.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -D POSTROUTING -s 20.0.19.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -D POSTROUTING -s 20.0.20.0/24 -o $NIC -j MASQUERADE
-iptables -D INPUT -i tun0 -j ACCEPT
-iptables -D OUTPUT -o tun0 -j ACCEPT
 iptables -D INPUT -p tcp --dport ssh -j ACCEPT
 iptables -D OUTPUT -p tcp --dport ssh -j ACCEPT
 iptables -D INPUT -p tcp --dport 80 -j ACCEPT
