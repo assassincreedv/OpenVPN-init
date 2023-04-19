@@ -284,7 +284,7 @@ function installQuestions() {
 		;;
 	2)
 		until [[ $PORT =~ ^[0-9]+$ ]] && [ "$PORT" -ge 1 ] && [ "$PORT" -le 65535 ]; do
-			read -rp "Custom port [1-65535]: " -e -i 18181 PORT
+			read -rp "Custom port [1-65535]: " -e -i 1194 PORT
 		done
 		;;
 	3)
@@ -615,7 +615,7 @@ function installOpenVPN() {
 		APPROVE_INSTALL=${APPROVE_INSTALL:-y}
 		APPROVE_IP=${APPROVE_IP:-y}
 		IPV6_SUPPORT=${IPV6_SUPPORT:-n}
-		PORT_CHOICE=${PORT_CHOICE:-2}
+		PORT_CHOICE=${PORT_CHOICE:-1}
 		PROTOCOL_CHOICE=${PROTOCOL_CHOICE:-2}
 		DNS=${DNS:-9}
 		COMPRESSION_ENABLED=${COMPRESSION_ENABLED:-n}
