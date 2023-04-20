@@ -273,7 +273,7 @@ function installQuestions() {
 	done
 	echo ""
 	echo "What port do you want OpenVPN to listen to?"
-	echo "   1) Default: 1194"
+	echo "   1) Default: 18181"
 	echo "   2) Custom"
 	echo "   3) Random [49152-65535]"
 	until [[ $PORT_CHOICE =~ ^[1-3]$ ]]; do
@@ -281,11 +281,11 @@ function installQuestions() {
 	done
 	case $PORT_CHOICE in
 	1)
-		PORT="1194"
+		PORT="18181"
 		;;
 	2)
 		until [[ $PORT =~ ^[0-9]+$ ]] && [ "$PORT" -ge 1 ] && [ "$PORT" -le 65535 ]; do
-			read -rp "Custom port [1-65535]: " -e -i 1194 PORT
+			read -rp "Custom port [1-65535]: " -e -i 18181 PORT
 		done
 		;;
 	3)
