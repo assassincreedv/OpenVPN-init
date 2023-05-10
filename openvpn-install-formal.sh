@@ -1024,23 +1024,13 @@ iptables -A OUTPUT -o lo -j ACCEPT
 iptables -I INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -I OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
-iptables -A INPUT -p tcp --dport 5000 -j ACCEPT
-iptables -A INPUT -p tcp --dport 3000 -j ACCEPT
 iptables -P INPUT DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT DROP
 iptables -A FORWARD -i tun0 -o $NIC -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i $NIC -o tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 80 -j ACCEPT
-iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 443 -j ACCEPT
 iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 53 -j ACCEPT
 iptables -A FORWARD -i tun0 -o $NIC -p udp --dport 53 -j ACCEPT
-iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 22 -j ACCEPT
-iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 80 -j ACCEPT
-iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 443 -j ACCEPT
-iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 53 -j ACCEPT
-iptables -A FORWARD -i eth0 -o $NIC -p udp --dport 53 -j ACCEPT
-iptables -A FORWARD -i eth0 -o $NIC -p tcp --dport 22 -j ACCEPT
 iptables -I INPUT 1 -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >/etc/iptables/add-openvpn-rules.sh
 
 	if [[ $IPV6_SUPPORT == 'y' ]]; then
@@ -1092,20 +1082,10 @@ iptables -D OUTPUT -o lo -j ACCEPT
 iptables -D INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -D OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -D INPUT -p icmp --icmp-type echo-request -j ACCEPT
-iptables -D INPUT -p tcp --dport 5000 -j ACCEPT
-iptables -D INPUT -p tcp --dport 3000 -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -D FORWARD -i $NIC -o tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 80 -j ACCEPT
-iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 443 -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 53 -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -p udp --dport 53 -j ACCEPT
-iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 22 -j ACCEPT
-iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 80 -j ACCEPT
-iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 443 -j ACCEPT
-iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 53 -j ACCEPT
-iptables -D FORWARD -i eth0 -o $NIC -p udp --dport 53 -j ACCEPT
-iptables -D FORWARD -i eth0 -o $NIC -p tcp --dport 22 -j ACCEPT
 iptables -D INPUT -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >/etc/iptables/rm-openvpn-rules.sh
 
 	if [[ $IPV6_SUPPORT == 'y' ]]; then
