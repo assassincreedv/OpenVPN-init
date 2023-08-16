@@ -1032,6 +1032,7 @@ iptables -P FORWARD DROP
 iptables -P OUTPUT DROP
 iptables -A FORWARD -i tun0 -o $NIC -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i $NIC -o tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 80 -j ACCEPT
 iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 443 -j ACCEPT
 iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 53 -j ACCEPT
@@ -1097,6 +1098,7 @@ iptables -D INPUT -p tcp --dport 5000 -j ACCEPT
 iptables -D INPUT -p tcp --dport 3000 -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -D FORWARD -i $NIC -o tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 80 -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 443 -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 53 -j ACCEPT

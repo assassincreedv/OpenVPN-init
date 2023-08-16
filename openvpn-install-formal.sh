@@ -1029,6 +1029,7 @@ iptables -P FORWARD DROP
 iptables -P OUTPUT DROP
 iptables -A FORWARD -i tun0 -o $NIC -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i $NIC -o tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i tun0 -o $NIC -p tcp --dport 53 -j ACCEPT
 iptables -A FORWARD -i tun0 -o $NIC -p udp --dport 53 -j ACCEPT
 iptables -I INPUT 1 -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >/etc/iptables/add-openvpn-rules.sh
@@ -1084,6 +1085,7 @@ iptables -D OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -D INPUT -p icmp --icmp-type echo-request -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -D FORWARD -i $NIC -o tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -p tcp --dport 53 -j ACCEPT
 iptables -D FORWARD -i tun0 -o $NIC -p udp --dport 53 -j ACCEPT
 iptables -D INPUT -i $NIC -p $PROTOCOL --dport $PORT -j ACCEPT" >/etc/iptables/rm-openvpn-rules.sh
